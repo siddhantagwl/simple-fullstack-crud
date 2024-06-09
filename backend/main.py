@@ -46,6 +46,27 @@ def get_contacts():
     return jsonify({"contacts": json_contacts}, 200)
 
 # update
+@app.route("/update_contact/<int:user_id>", methods=["PATCH"])
+# the arg user_id matches the path param above <int:user_id>
+def update_contact(user_id):
+    # find this user first
+    contact = Contact.query.get(user_id)
+
+    if not contact:
+        return jsonify({"message": f"User not found with id: {user_id}"}), 404
+
+    # get the updated data from request form
+    data = request.json
+
+    # make the update, if not found, keep the original entries
+    contact.first_name = data.get("firstName", contact.first_name)
+    contact.last_name = data.get("lastName", contact.last_name)
+    contact.email = data.get("email", contact.email)
+
+    # since this contact was alraedy added , we just need to commit it
+    db.session.commit()
+
+    return jsonify({"message": f"User {first_name} updated"}), 201
 
 # delete
 
