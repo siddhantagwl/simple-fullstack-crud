@@ -45,6 +45,7 @@ def get_contacts():
     # note: status code 200 is by default included
     return jsonify({"contacts": json_contacts}, 200)
 
+
 # update
 @app.route("/update_contact/<int:user_id>", methods=["PATCH"])
 # the arg user_id matches the path param above <int:user_id>
@@ -68,7 +69,21 @@ def update_contact(user_id):
 
     return jsonify({"message": f"User {user_id} updated"}), 201
 
+
 # delete
+@app.route("/delete_contact/<int:user_id>", methods=["DELETE"])
+def delete_contact(user_id):
+    # find this user first
+    contact = Contact.query.get(user_id)
+
+    if not contact:
+        return jsonify({"message": f"User not found with id: {user_id}"}), 404
+
+    db.session.delete(contact)
+    db.session.commit()
+
+    return jsonify({"message": f"User {user_id} Deleted"}), 200
+
 
 # if we were to run main.py directly, it will run the code in if block
 # reason is if we import the functions/variables of main.py into another code, the 
