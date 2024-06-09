@@ -3,12 +3,23 @@ from flask import request, jsonify
 from config import app, db
 from models import Contact
 
+@app.route("/")
+def home():
+    return "welcome to basic flask+react crud app"
+
 # create end point: localhost:8080/create_contact
 # we need firstname, lastname and email and submit data to server,
 # so a post request
 
 
 # read
+@app.route("/contacts", methods=["GET"])
+def get_contacts():
+    # uses flask SQLAlchemy ORM to get all the contacts stored inside the Contact DB
+    contacts = Contact.query.all() # returns python obj
+    # convert to json now
+    json_contacts = list(map(lambda x: x.to_json(), contacts))
+    return jsonify({"contacts": json_contacts})
 
 # update
 
