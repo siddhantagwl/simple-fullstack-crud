@@ -66,7 +66,7 @@ def update_contact(user_id):
     # since this contact was alraedy added , we just need to commit it
     db.session.commit()
 
-    return jsonify({"message": f"User {first_name} updated"}), 201
+    return jsonify({"message": f"User {user_id} updated"}), 201
 
 # delete
 
