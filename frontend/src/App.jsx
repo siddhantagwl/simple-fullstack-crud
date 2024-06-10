@@ -1,35 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
+import ContactList from "./components/ContactList";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [contacts, setcontacts] = useState([]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  // as soon as this page loads, useEfect will be trigered and will be calling this function
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  const fetchContacts = async () => {
+    const resp = await fetch("http://127.0.0.1:5000/contacts");
+    const data = await resp.json();
+    setcontacts(data[0].contacts);
+    console.log("contacts are", data[0].contacts);
+  };
+
+  return <ContactList contacts={contacts}></ContactList>;
+  // return "Hi";
 }
 
-export default App
+export default App;
